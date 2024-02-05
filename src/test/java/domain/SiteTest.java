@@ -17,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class SiteTest {
     
+    Site instance;
+    
     public SiteTest() {
     }
     
@@ -30,10 +32,12 @@ public class SiteTest {
     
     @BeforeEach
     public void setUp() {
+        instance = new Site(1, "Högskolan i Gävle", 10000);
     }
     
     @AfterEach
     public void tearDown() {
+        instance = null;
     }
 
     /**
@@ -42,12 +46,17 @@ public class SiteTest {
     @Test
     public void testGetId() {
         System.out.println("getId");
-        Site instance = null;
-        int expResult = 0;
-        int result = instance.getId();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(1, instance.getId());
+    }
+    
+    /**
+     * Test of getArea method, of class Site.
+     */
+    @Test
+    public void testGetIdOnNullInstance() {
+        System.out.println("getId");
+        instance = null;
+        assertThrows(NullPointerException.class, () -> instance.getId());
     }
 
     /**
@@ -56,12 +65,17 @@ public class SiteTest {
     @Test
     public void testGetName() {
         System.out.println("getName");
-        Site instance = null;
-        String expResult = "";
-        String result = instance.getName();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals("Högskolan i Gävle", instance.getName());
+    }
+    
+    /**
+     * Test of getArea method, of class Site.
+     */
+    @Test
+    public void testGetNameOnNullInstance() {
+        System.out.println("getName");
+        instance = null;
+        assertThrows(NullPointerException.class, () -> instance.getName());
     }
 
     /**
@@ -70,11 +84,27 @@ public class SiteTest {
     @Test
     public void testSetName() {
         System.out.println("setName");
-        String name = "";
-        Site instance = null;
-        instance.setName(name);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.setName("Högskolan i Borås");
+        assertEquals("Högskolan i Borås", instance.getName());
+    }
+    
+    /**
+     * Test of setName method, of class Site.
+     */
+    @Test
+    public void testSetNameToNull() {
+        System.out.println("setName");
+        instance.setName("Högskolan i Borås");
+        assertEquals("Högskolan i Borås", instance.getName());
+    }
+    
+    /**
+     * Test of setName method, of class Site.
+     */
+    @Test
+    public void testSetNameToEmptyString() {
+        System.out.println("setName");
+        assertThrows(IllegalArgumentException.class, () -> instance.setName(""));
     }
 
     /**
@@ -83,12 +113,17 @@ public class SiteTest {
     @Test
     public void testGetArea() {
         System.out.println("getArea");
-        Site instance = null;
-        int expResult = 0;
-        int result = instance.getArea();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(10000, instance.getArea());
+    }
+    
+    /**
+     * Test of getArea method, of class Site.
+     */
+    @Test
+    public void testGetAreaOnNullInstance() {
+        System.out.println("getArea");
+        instance = null;
+        assertThrows(NullPointerException.class, () -> instance.getArea());
     }
 
     /**
@@ -97,11 +132,26 @@ public class SiteTest {
     @Test
     public void testSetArea() {
         System.out.println("setArea");
-        int squareMeter = 0;
-        Site instance = null;
-        instance.setArea(squareMeter);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.setArea(20000);
+        assertEquals(20000, instance.getArea());
+    }
+    
+    /**
+     * Test of setArea method, of class Site.
+     */
+    @Test
+    public void testSetAreaToZero() {
+        System.out.println("setArea");
+        assertThrows(IllegalArgumentException.class, () -> instance.setArea(0));
+    }
+    
+    /**
+     * Test of setArea method, of class Site.
+     */
+    @Test
+    public void testSetAreaToNegativeValue() {
+        System.out.println("setArea");
+        assertThrows(IllegalArgumentException.class, () -> instance.setArea(-10));
     }
 
     /**
@@ -110,12 +160,7 @@ public class SiteTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Site instance = null;
-        String expResult = "";
-        String result = instance.toString();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals("Högskolan i Gävle", instance.toString());
     }
     
 }

@@ -49,6 +49,16 @@ public class PersonTest {
         System.out.println("getId");
         assertEquals(1, instance.getId());
     }
+    
+    /**
+     * Test of getArea method, of class Site.
+     */
+    @Test
+    public void testGetIdOnNullInstance() {
+        System.out.println("getId");
+        instance = null;
+        assertThrows(NullPointerException.class, () -> instance.getId());
+    }
 
     /**
      * Test of getName method, of class Person.
@@ -56,10 +66,19 @@ public class PersonTest {
     @Test
     public void testGetName() {
         System.out.println("getName");
-        //Person instance = new Person("William Lindahl", 2003);
         String expResult = "William Lindahl";
         String result = instance.getName();
         assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of getArea method, of class Site.
+     */
+    @Test
+    public void testGetNameOnNullInstance() {
+        System.out.println("getName");
+        instance = null;
+        assertThrows(NullPointerException.class, () -> instance.getName());
     }
 
     /**
@@ -80,7 +99,6 @@ public class PersonTest {
     public void testSetNameWithEmptyString() {
         System.out.println("setName");
         String name = "";
-        //Person instance = new Person("William Lindahl", 2003);
         assertThrows(IllegalArgumentException.class, () -> instance.setName(name));
     }
     
@@ -91,7 +109,6 @@ public class PersonTest {
     public void testSetNameToNull() {
         System.out.println("setName");
         String name = null;
-        //Person instance = new Person("William Lindahl", 2003);
         assertThrows(NullPointerException.class, () -> instance.setName(name));
     }
 
@@ -101,7 +118,6 @@ public class PersonTest {
     @Test
     public void testGetBirthYear() {
         System.out.println("getBirthYear");
-        //Person instance = new Person("William Lindahl", 2003);
         int expResult = 2003;
         int result = instance.getBirthYear();
         assertEquals(expResult, result);
@@ -115,6 +131,16 @@ public class PersonTest {
         System.out.println("getBirthYear");
         instance = null;
         assertThrows(NullPointerException.class, () -> instance.getBirthYear());
+    }
+    
+    /**
+     * Test of setBirthYear method, of class Person.
+     */
+    @Test
+    public void testSetBirthYear() {
+        System.out.println("setBirthYear");
+        instance.setBirthYear(2010);
+        assertEquals(2010, instance.getBirthYear());
     }
 
     /**
@@ -140,25 +166,12 @@ public class PersonTest {
     }
     
     /**
-     * Test of setBirthYear method, of class Person.
-     */
-    @Test
-    public void testSetBirthYear() {
-        System.out.println("setBirthYear");
-        instance.setBirthYear(2010);
-        assertEquals(2010, instance.getBirthYear());
-    }
-
-    /**
      * Test of toString method, of class Person.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        //Person instance = new Person("William Lindahl", 2003);
-        String expResult = "William Lindahl";
-        String result = instance.toString();
-        assertEquals(expResult, result);
+        assertEquals("William Lindahl", instance.toString());
     }
     
 }
