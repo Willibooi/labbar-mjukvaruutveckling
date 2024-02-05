@@ -36,6 +36,8 @@ public class Person {
     }
     
     public void setName(String name) {
+        if(name.equals(""))
+            throw new IllegalArgumentException();
         if(name.length() <= 50) 
             this.name = name;
         else 
