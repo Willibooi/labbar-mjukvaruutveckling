@@ -104,9 +104,10 @@ public class PersonDao implements Dao<Person> {
 	@Override
 	public void update(Person t) {
             try {
-                PreparedStatement preparedStatement = dbConManagerSingleton.prepareStatement("UPDATE labpersons SET name=?, birth_year=? RETURNING id;");
+                PreparedStatement preparedStatement = dbConManagerSingleton.prepareStatement("UPDATE labpersons SET name=?, birth_year=? WHERE id=?;");
                 preparedStatement.setString(1, t.getName());
                 preparedStatement.setInt(2, t.getBirthYear());
+                preparedStatement.setInt(3, t.getId());
                 boolean affectedRows = preparedStatement.execute();
                 if( !affectedRows) { 
                     throw new SQLException("No update was performed on labpersons with 'id' " + t.getId());

@@ -9,6 +9,7 @@ package domain;
  * @author GTSA - Infinity
  */
 public class Room {
+    
     int id;
     int roomNum;
     int numOfSeats;

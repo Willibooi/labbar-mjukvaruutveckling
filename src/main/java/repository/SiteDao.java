@@ -4,8 +4,7 @@
  */
 package repository;
 
-
-import domain.Room;
+import domain.Site;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,42 +16,41 @@ import java.util.NoSuchElementException;
  *
  * @author GTSA - Infinity
  */
-public class RoomDao implements Dao<Room> {
-    
+public class SiteDao implements Dao<Site> {
     
     DbConnectionManager dbConManagerSingleton = null;
 
-    public RoomDao() {
+    public SiteDao() {
             dbConManagerSingleton = DbConnectionManager.getInstance();
     }
 
     @Override
-    public Room get(int id) {
-        Room person = null;
+    public Site get(int id) {
+        Site site = null;
         try{
-            ResultSet resultSet = dbConManagerSingleton.excecuteQuery("SELECT id, roomNum, numOfSeats FROM labrooms WHERE id=" + id);
+            ResultSet resultSet = dbConManagerSingleton.excecuteQuery("SELECT id, name, area FROM labsites WHERE id=" + id);
             if( !resultSet.next())
                     throw new NoSuchElementException("The room with id " + id + " doesen't exist in database");
             else
-                    person = new Room(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3));
+                    site = new Site(resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3));
             dbConManagerSingleton.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return person;
+        return site;
     }
 
     @Override
-    public List<Room> getAll() {
-        ArrayList<Room> list = new ArrayList<>();
+    public List<Site> getAll() {
+        ArrayList<Site> list = new ArrayList<>();
 		
         try {
-            ResultSet resultSet = dbConManagerSingleton.excecuteQuery("SELECT id, roomNum, numOfSeats FROM labrooms");
+            ResultSet resultSet = dbConManagerSingleton.excecuteQuery("SELECT id, name, area FROM labsites");
             while (resultSet.next()) {
-                    list.add(new Room(resultSet.getInt(1), 
-                                                             resultSet.getInt(2),
+                    list.add(new Site(resultSet.getInt(1), 
+                                                             resultSet.getString(2),
                                                              resultSet.getInt(3))
                                     );
 
@@ -65,29 +63,29 @@ public class RoomDao implements Dao<Room> {
     }
 
     @Override
-    public boolean save(Room t) {
+    public boolean save(Site t) {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         int rowCount = 0;
         boolean saveSucess = false;
         try {
             //****This is just for checking the 'save' is a sucess. Count rows before save... ***
-            resultSet = dbConManagerSingleton.excecuteQuery("SELECT COUNT(id) FROM labrooms");
+            resultSet = dbConManagerSingleton.excecuteQuery("SELECT COUNT(id) FROM labsites");
             resultSet.next();
             rowCount = resultSet.getInt(1);
             //System.out.println(rowCount); // Debug print
 
             //*******This is the main 'save' operation ***************************
             preparedStatement = dbConManagerSingleton.prepareStatement(
-                                                                              "INSERT INTO labrooms (roomNum, numOfSeats) " +
+                                                                              "INSERT INTO labsites (name, area) " +
                                                                               "VALUES (?, ?)");
-            preparedStatement.setInt(1, t.getRoomNum());
-            preparedStatement.setInt(2, t.getNumOfSeats());
+            preparedStatement.setString(1, t.getName());
+            preparedStatement.setInt(2, t.getArea());
             preparedStatement.executeUpdate();
             // ********************************************************************
 
             // **** Check nbr of rows after 'save'. Compare with previous row count *****
-            resultSet = dbConManagerSingleton.excecuteQuery("SELECT COUNT(id) FROM labrooms");
+            resultSet = dbConManagerSingleton.excecuteQuery("SELECT COUNT(id) FROM labsites");
             resultSet.next();
             int newRowCount = resultSet.getInt(1);
             if( newRowCount == (rowCount + 1)) // Check if table is one more row after 'save'
@@ -101,20 +99,20 @@ public class RoomDao implements Dao<Room> {
     }
 
     @Override
-    public void update(Room t) {
+    public void update(Site t) {
         PreparedStatement preparedStatement = null;
 
         try {
             // *******This is the main 'save' operation ***************************
             preparedStatement = dbConManagerSingleton
-                            .prepareStatement("UPDATE labrooms SET roomNum=?, numOfSeats=? WHERE id=?;");
-            preparedStatement.setInt(1, t.getRoomNum());
-            preparedStatement.setInt(2, t.getNumOfSeats());
+                            .prepareStatement("UPDATE labsites SET name=?, area=? WHERE id=?;");
+            preparedStatement.setString(1, t.getName());
+            preparedStatement.setInt(2, t.getArea());
             preparedStatement.setInt(3, t.getId());
-            
+
             boolean affectedRows = preparedStatement.execute();
             if( !affectedRows) {
-                    throw new SQLException("No update was performed on labrooms with 'id' " + t.getId());
+                    throw new SQLException("No update was performed on labsites with 'id' " + t.getId());
             }
 
             // ********************************************************************
@@ -125,15 +123,15 @@ public class RoomDao implements Dao<Room> {
     }
 
     @Override
-    public void delete(Room t) {
+    public void delete(Site t) {
         PreparedStatement preparedStatement = null;
         try {
             // *******This is the main 'save' operation ***************************
             preparedStatement = dbConManagerSingleton
-                            .prepareStatement("DELETE FROM labrooms WHERE id = " + t.getId());
+                            .prepareStatement("DELETE FROM labsites WHERE id = " + t.getId());
             boolean affectedRows = preparedStatement.execute();
             if( !affectedRows) {
-                    throw new SQLException("No update was performed on labrooms with 'id' " + t.getId());
+                    throw new SQLException("No update was performed on labsites with 'id' " + t.getId());
             }
             // ********************************************************************
         } catch (SQLException e) {
