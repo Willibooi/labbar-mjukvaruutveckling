@@ -28,13 +28,6 @@ public class Room {
         return id;
     }
     
-    public void setId(int id) {
-        if(id > 0)
-            this.id = id;
-        else
-            throw new IllegalArgumentException();
-    }
-    
     public int getRoomNum() {
         return roomNum;
     }
@@ -57,6 +50,7 @@ public class Room {
             throw new IllegalArgumentException();
     }
     
+    @Override
     public String toString() {
         return Integer.toString(roomNum);
     }

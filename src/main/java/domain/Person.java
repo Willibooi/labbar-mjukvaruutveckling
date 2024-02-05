@@ -31,13 +31,6 @@ public class Person {
         return id;
     }
     
-    public void setId(int id) {
-        if(id > 0)
-            this.id = id;
-        else
-            throw new IllegalArgumentException();
-    }
-    
     public String getName() {
         return name;
     }
@@ -61,6 +54,7 @@ public class Person {
         
     }
     
+    @Override
     public String toString() {
         return name;
     }
