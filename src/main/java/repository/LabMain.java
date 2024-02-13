@@ -17,7 +17,7 @@ import service.SiteService;
  *
  * @author GTSA - Infinity
  */
-public class Lab1 {
+public class LabMain {
 
     public static void main(String[] args) {
         
