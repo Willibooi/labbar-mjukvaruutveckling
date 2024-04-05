@@ -17,10 +17,16 @@ public class PersonService {
     PersonDao dao = new PersonDao();
     
     public PersonService() {
-        
+        this(new PersonDao());
+    }
+    public PersonService(PersonDao personDao) {
+        dao = personDao;
     }
     
     public void save(Person p) {
+        if(p == null) {
+            throw new NullPointerException("Cant save null");
+        }
         dao.save(p);
     }
     
@@ -33,10 +39,16 @@ public class PersonService {
     }
     
     public void update(Person p) {
+        if(p == null) {
+            throw new NullPointerException("Cant update null");
+        }
         dao.update(p);
     }
     
     public void delete(Person p) {
+        if(p == null) {
+            throw new NullPointerException("Cant delete null");
+        }
         dao.delete(p);
     }
 }

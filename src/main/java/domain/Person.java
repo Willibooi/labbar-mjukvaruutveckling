@@ -5,6 +5,7 @@
 package domain;
 
 import java.time.Year;
+import java.util.Objects;
 
 /**
  *
@@ -60,5 +61,19 @@ public class Person {
     public String toString() {
         return name;
     }
+    
+    @Override
+        public boolean equals(Object p) {
+        return p instanceof Person && hashCode() == p.hashCode();
+    }
+    @Override
+        public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + this.id;
+        hash = 29 * hash + Objects.hashCode(this.name);
+        hash = 29 * hash + this.birth_year;
+        return hash;
+    }
+
     
 }

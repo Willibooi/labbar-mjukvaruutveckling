@@ -21,7 +21,8 @@ public class SiteDao implements Dao<Site> {
     DbConnectionManager dbConManagerSingleton = null;
 
     public SiteDao() {
-            dbConManagerSingleton = DbConnectionManager.getInstance();
+            //dbConManagerSingleton = DbConnectionManager.getInstance();
+            this.dbConManagerSingleton = new DbConnectionManager();
     }
 
     @Override

@@ -23,7 +23,8 @@ public class RoomDao implements Dao<Room> {
     DbConnectionManager dbConManagerSingleton = null;
 
     public RoomDao() {
-            dbConManagerSingleton = DbConnectionManager.getInstance();
+            //dbConManagerSingleton = DbConnectionManager.getInstance();
+            this.dbConManagerSingleton = new DbConnectionManager();
     }
 
     @Override

@@ -35,16 +35,20 @@ public class DbConnectionManager {
 	private Statement statement = null;
 	private ResultSet resultSet = null;
 	
-	private static DbConnectionManager instance = null;
+	//private static DbConnectionManager instance = null;
 	
-	private DbConnectionManager(){}
+	public DbConnectionManager(){
+        
+        }
 	
+        /*
 	public static DbConnectionManager getInstance() {
 		if(instance == null) {
 			instance = new DbConnectionManager();
 		}
 		return instance;
 	}
+        */
 
 	/**
 	 * This method creates a connection to the database by a connection URL

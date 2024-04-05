@@ -24,7 +24,12 @@ public class PersonDao implements Dao<Person> {
 	DbConnectionManager dbConManagerSingleton = null;
 	
 	public PersonDao() {
-            dbConManagerSingleton = DbConnectionManager.getInstance();
+            //dbConManagerSingleton = DbConnectionManager.getInstance();
+            this.dbConManagerSingleton = new DbConnectionManager();
+	}
+        
+        public PersonDao(DbConnectionManager dbConManagerSingleton) {
+            this.dbConManagerSingleton = dbConManagerSingleton;
 	}
 	
 	@Override
@@ -124,7 +129,7 @@ public class PersonDao implements Dao<Person> {
                 PreparedStatement preparedStatement = dbConManagerSingleton.prepareStatement("DELETE FROM labpersons WHERE id = " + t.getId());
                 boolean affectedRows = preparedStatement.execute();
                 if( !affectedRows) {
-                    throw new SQLException("No update was performed on labpersons with 'id' " + t.getId());
+                    throw new SQLException("Delete was not performed on labpersons with 'id' " + t.getId());
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

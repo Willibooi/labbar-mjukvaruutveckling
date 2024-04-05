@@ -16,10 +16,16 @@ public class SiteService {
     SiteDao dao = new SiteDao();
     
     public SiteService() {
-        
+        this(new SiteDao());
+    }
+    public SiteService(SiteDao siteDao) {
+        dao = siteDao;
     }
     
     public void save(Site p) {
+        if(p == null) {
+            throw new NullPointerException("Cant save null");
+        }
         dao.save(p);
     }
     
@@ -32,10 +38,16 @@ public class SiteService {
     }
     
     public void update(Site p) {
+        if(p == null) {
+            throw new NullPointerException("Cant update null");
+        }
         dao.update(p);
     }
     
     public void delete(Site p) {
+        if(p == null) {
+            throw new NullPointerException("Cant delete null");
+        }
         dao.delete(p);
     }
 }

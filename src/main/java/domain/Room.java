@@ -4,6 +4,8 @@
  */
 package domain;
 
+import java.util.Objects;
+
 /**
  *
  * @author GTSA - Infinity
@@ -54,6 +56,19 @@ public class Room {
     @Override
     public String toString() {
         return Integer.toString(roomNum);
+    }
+    
+    @Override
+    public boolean equals(Object p) {
+        return p instanceof Room && hashCode() == p.hashCode();
+    }
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + this.id;
+        hash = 29 * hash + this.roomNum;
+        hash = 29 * hash + this.numOfSeats;
+        return hash;
     }
     
 }

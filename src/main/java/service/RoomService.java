@@ -18,10 +18,16 @@ public class RoomService {
     RoomDao dao = new RoomDao();
     
     public RoomService() {
-        
+        this(new RoomDao());
+    }
+    public RoomService(RoomDao roomDao) {
+        dao = roomDao;
     }
     
     public void save(Room p) {
+        if(p == null) {
+            throw new NullPointerException("Cant save null");
+        }
         dao.save(p);
     }
     
@@ -34,10 +40,16 @@ public class RoomService {
     }
     
     public void update(Room p) {
+        if(p == null) {
+            throw new NullPointerException("Cant update null");
+        }
         dao.update(p);
     }
     
     public void delete(Room p) {
+        if(p == null) {
+            throw new NullPointerException("Cant delete null");
+        }
         dao.delete(p);
     }
 }
