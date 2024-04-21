@@ -8,7 +8,7 @@ import java.time.Year;
 
 /**
  *
- * @author GTSA - Infinity
+ * @author 22wili03
  */
 public class Person {
     
@@ -22,9 +22,8 @@ public class Person {
     }
     
     public Person(int id, String name, int birth_year) {
+        this(name, birth_year);
         this.id = id;
-        this.name = name;
-        this.birth_year = birth_year;
     }
     
     public int getId() {

@@ -10,7 +10,7 @@ import repository.SiteDao;
 
 /**
  *
- * @author GTSA - Infinity
+ * @author 22wili03
  */
 public class SiteService {
     SiteDao dao = new SiteDao();

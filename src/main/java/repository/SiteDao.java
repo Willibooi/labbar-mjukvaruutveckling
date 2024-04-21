@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 
 /**
  *
- * @author GTSA - Infinity
+ * @author 22wili03
  */
 public class SiteDao implements Dao<Site> {
     
@@ -69,22 +69,18 @@ public class SiteDao implements Dao<Site> {
         int rowCount = 0;
         boolean saveSucess = false;
         try {
-            //****This is just for checking the 'save' is a sucess. Count rows before save... ***
+            
             resultSet = dbConManagerSingleton.excecuteQuery("SELECT COUNT(id) FROM labsites");
             resultSet.next();
             rowCount = resultSet.getInt(1);
-            //System.out.println(rowCount); // Debug print
 
-            //*******This is the main 'save' operation ***************************
             preparedStatement = dbConManagerSingleton.prepareStatement(
                                                                               "INSERT INTO labsites (name, area) " +
                                                                               "VALUES (?, ?)");
             preparedStatement.setString(1, t.getName());
             preparedStatement.setInt(2, t.getArea());
             preparedStatement.executeUpdate();
-            // ********************************************************************
 
-            // **** Check nbr of rows after 'save'. Compare with previous row count *****
             resultSet = dbConManagerSingleton.excecuteQuery("SELECT COUNT(id) FROM labsites");
             resultSet.next();
             int newRowCount = resultSet.getInt(1);
@@ -103,7 +99,7 @@ public class SiteDao implements Dao<Site> {
         PreparedStatement preparedStatement = null;
 
         try {
-            // *******This is the main 'save' operation ***************************
+
             preparedStatement = dbConManagerSingleton
                             .prepareStatement("UPDATE labsites SET name=?, area=? WHERE id=?;");
             preparedStatement.setString(1, t.getName());
@@ -115,7 +111,6 @@ public class SiteDao implements Dao<Site> {
                     throw new SQLException("No update was performed on labsites with 'id' " + t.getId());
             }
 
-            // ********************************************************************
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -126,14 +121,14 @@ public class SiteDao implements Dao<Site> {
     public void delete(Site t) {
         PreparedStatement preparedStatement = null;
         try {
-            // *******This is the main 'save' operation ***************************
+
             preparedStatement = dbConManagerSingleton
                             .prepareStatement("DELETE FROM labsites WHERE id = " + t.getId());
             boolean affectedRows = preparedStatement.execute();
             if( !affectedRows) {
                     throw new SQLException("No update was performed on labsites with 'id' " + t.getId());
             }
-            // ********************************************************************
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
