@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 
 /**
  *
- * @author 22wili03
+ * @author GTSA - Infinity
  */
 public class RoomDao implements Dao<Room> {
     
@@ -71,18 +71,22 @@ public class RoomDao implements Dao<Room> {
         int rowCount = 0;
         boolean saveSucess = false;
         try {
-
+            //****This is just for checking the 'save' is a sucess. Count rows before save... ***
             resultSet = dbConManagerSingleton.excecuteQuery("SELECT COUNT(id) FROM labrooms");
             resultSet.next();
             rowCount = resultSet.getInt(1);
+            //System.out.println(rowCount); // Debug print
 
+            //*******This is the main 'save' operation ***************************
             preparedStatement = dbConManagerSingleton.prepareStatement(
                                                                               "INSERT INTO labrooms (roomNum, numOfSeats) " +
                                                                               "VALUES (?, ?)");
             preparedStatement.setInt(1, t.getRoomNum());
             preparedStatement.setInt(2, t.getNumOfSeats());
             preparedStatement.executeUpdate();
+            // ********************************************************************
 
+            // **** Check nbr of rows after 'save'. Compare with previous row count *****
             resultSet = dbConManagerSingleton.excecuteQuery("SELECT COUNT(id) FROM labrooms");
             resultSet.next();
             int newRowCount = resultSet.getInt(1);
@@ -101,7 +105,7 @@ public class RoomDao implements Dao<Room> {
         PreparedStatement preparedStatement = null;
 
         try {
-            
+            // *******This is the main 'save' operation ***************************
             preparedStatement = dbConManagerSingleton
                             .prepareStatement("UPDATE labrooms SET roomNum=?, numOfSeats=? WHERE id=?;");
             preparedStatement.setInt(1, t.getRoomNum());
@@ -113,7 +117,7 @@ public class RoomDao implements Dao<Room> {
                     throw new SQLException("No update was performed on labrooms with 'id' " + t.getId());
             }
 
-            
+            // ********************************************************************
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -124,14 +128,14 @@ public class RoomDao implements Dao<Room> {
     public void delete(Room t) {
         PreparedStatement preparedStatement = null;
         try {
-            
+            // *******This is the main 'save' operation ***************************
             preparedStatement = dbConManagerSingleton
                             .prepareStatement("DELETE FROM labrooms WHERE id = " + t.getId());
             boolean affectedRows = preparedStatement.execute();
             if( !affectedRows) {
                     throw new SQLException("No update was performed on labrooms with 'id' " + t.getId());
             }
-            
+            // ********************************************************************
         } catch (SQLException e) {
             e.printStackTrace();
         }

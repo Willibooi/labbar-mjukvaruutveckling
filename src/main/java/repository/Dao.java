@@ -3,8 +3,11 @@ package repository;
 import java.util.List;
 
 /**
+ * Interface for all CRUD operations of DAO classes
+ * @author awi
  *
- * @author 22wili03
+ * @param <T> One of the intended model classes that a DAO
+ * implementation should be able to handle
  */
 public interface Dao<T> {
 

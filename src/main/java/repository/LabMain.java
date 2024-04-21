@@ -15,7 +15,7 @@ import service.SiteService;
 
 /**
  *
- * @author 22wili03
+ * @author GTSA - Infinity
  */
 public class LabMain {
 

@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
- * @author 22wili03
+ * @author GTSA - Infinity
  */
 public class SiteTest {
     

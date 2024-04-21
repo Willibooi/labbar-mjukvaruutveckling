@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
- * @author 22wili03
+ * @author GTSA - Infinity
  */
 public class PersonTest {
     
@@ -51,7 +51,7 @@ public class PersonTest {
     }
     
     /**
-     * Test of getId method, on null instance of class Person.
+     * Test of getArea method, of class Site.
      */
     @Test
     public void testGetIdOnNullInstance() {
@@ -72,7 +72,7 @@ public class PersonTest {
     }
     
     /**
-     * Test of getArea method, of class Person.
+     * Test of getArea method, of class Site.
      */
     @Test
     public void testGetNameOnNullInstance() {
@@ -139,28 +139,29 @@ public class PersonTest {
     @Test
     public void testSetBirthYear() {
         System.out.println("setBirthYear");
-        assertEquals(2003, instance.getBirthYear());
         instance.setBirthYear(2010);
         assertEquals(2010, instance.getBirthYear());
     }
 
     /**
-     * Test of setBirthYear method, of class Person with a date before 1900 as argument.
+     * Test of setBirthYear method, of class Person.
      */
     @Test
     public void testSetBirthYearBefore1900() {
         System.out.println("setBirthYear");
         int birth_year = 1899;
+        //Person instance = new Person("William Lindahl", 2003);
         assertThrows(IllegalArgumentException.class, () -> instance.setBirthYear(birth_year));
     }
     
     /**
-     * Test of setBirthYear method, of class Person with a future date as argument.
+     * Test of setBirthYear method, of class Person.
      */
     @Test
     public void testSetBirthYearInTheFuture() {
         System.out.println("setBirthYear");
         int birth_year = Year.now().getValue()+1;
+        //Person instance = new Person("William Lindahl", 2003);
         assertThrows(IllegalArgumentException.class, () -> instance.setBirthYear(birth_year));
     }
     

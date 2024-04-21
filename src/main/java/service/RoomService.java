@@ -12,7 +12,7 @@ import repository.RoomDao;
 
 /**
  *
- * @author 22wili03
+ * @author GTSA - Infinity
  */
 public class RoomService {
     RoomDao dao = new RoomDao();

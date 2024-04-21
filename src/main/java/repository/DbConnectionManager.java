@@ -7,16 +7,28 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 /**
- *
- * @author 22wili03
+ * DbConnectionManager is a Singleton object that manages the
+ * connection to the database.
+ * All transactions between DAO and the DB is performed by
+ * this object.
+ * DAO doesn't know anything about 'Connections', 'Transaction' or 
+ * other DB specific techniques, this is totally managed by this class.
+ * Only SQL strings, by query or PreparedStatements, and returned
+ * ResultSet is exposed to DAO
+ * <br><strong>Note:</strong> This connects to a postgresql database running
+ * on localhost. You also need to download suitable JDBC driver (4.2 or higher)
+ * from <a href="https://jdbc.postgresql.org/download.html">jdbc.postgresql.org/download</a>
+ * For other DB or different locations of the DB, please change connection String accordingly.
+ * @author awi (�ke Wallin)
+ * @version 2018-10-18
  */
 public class DbConnectionManager {
 	
-	private static final String DB_NAME = "myDB";
-	private static final String USER = "root";
-	private static final String PASSWORD = "root";
+	private static final String DB_NAME = "myDB"; // Change value to your database
+	private static final String USER = "root"; // Change value to your user
+	private static final String PASSWORD = "root"; // Change value to your password
+	//private static final String CONNECTION_URL = "jdbc:postgresql://localhost/" + DB_NAME;
         private static final String CONNECTION_URL = "jdbc:mysql://localhost:3306/" + DB_NAME;
 	
 	private Connection connection = null;
@@ -34,7 +46,12 @@ public class DbConnectionManager {
 		return instance;
 	}
 
-	
+	/**
+	 * This method creates a connection to the database by a connection URL
+	 * and a user name and password.
+	 * It is private because all DB specific is contained within this class.	
+	 * @return An instance of type java.sql.Connection
+	 */
 	private Connection getConnection() {
         try {
             connection = DriverManager.getConnection(CONNECTION_URL, USER, PASSWORD);
@@ -55,11 +72,33 @@ public class DbConnectionManager {
 		}
 		return statement;
 	}
-	
+	/**
+	 * Wrapper method to the 'statement'.executeQuery(String sqlString)
+	 * A statement needs a connection and is mandatory to be able
+	 * to send a query to the DB. This is wrapped to contain all DB 
+	 * specific techniques within this class.
+	 * This method is one of the few that is exposed as public and it
+	 * hides the DB-connection mechanism.
+	 * <strong>Because of the bare sql string this method is susceptible to 
+	 * SQL-injection and should only be used for read only transactions.</strong> 
+	 * @param sqlString The sql string
+	 * @return A ResultSet with the result from the SQL query
+	 * @throws SQLException 
+	 */
 	public ResultSet excecuteQuery( String sqlString) throws SQLException {
 		return this.getStatement(this.getConnection()).executeQuery(sqlString);
 	}
 	
+	/**
+	 * Wrapper method to the 'connection'.prepareStatement(String sqlString)
+	 * It hides the DB-connection mechanism but exposes (by public) the prepareStatement
+	 * method thus needing only a String (the SQL string) and returning a ResultSet
+	 * <strong>This method is not susceptible to SQL-injection and is therefore safe to use
+	 * for write operations on the database.<strong>
+	 * @param statementString
+	 * @return
+	 * @throws SQLException
+	 */
 	public PreparedStatement prepareStatement(String statementString) throws SQLException {
 		return this.getConnection().prepareStatement(statementString);
 	}
