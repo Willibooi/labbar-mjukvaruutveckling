@@ -6,7 +6,7 @@ package domain;
 
 /**
  *
- * @author GTSA - Infinity
+ * @author 22wili03
  */
 public class Room {
     
@@ -15,14 +15,13 @@ public class Room {
     int numOfSeats;
     
     public Room(int roomNum, int numOfSeats) {
-        this.roomNum = roomNum;
-        this.numOfSeats = numOfSeats;
+        setRoomNum(roomNum);
+        setNumOfSeats(numOfSeats);
     }
     
     public Room(int id, int roomNum, int numOfSeats) {
+        this(roomNum, numOfSeats);
         this.id = id;
-        this.roomNum = roomNum;
-        this.numOfSeats = numOfSeats;
     }
     
     public int getId() {
@@ -34,10 +33,9 @@ public class Room {
     }
     
     public void setRoomNum(int roomNum) {
-        if(roomNum > 0)
-            this.roomNum = roomNum;
-        else
+        if(roomNum < 0)
             throw new IllegalArgumentException();
+        this.roomNum = roomNum;
     }
     
     public int getNumOfSeats() {
@@ -45,10 +43,9 @@ public class Room {
     }
     
     public void setNumOfSeats(int numOfSeats) {
-        if(numOfSeats > 0)
-            this.numOfSeats = numOfSeats;
-        else 
+        if(numOfSeats < 0)
             throw new IllegalArgumentException();
+        this.numOfSeats = numOfSeats;
     }
     
     @Override

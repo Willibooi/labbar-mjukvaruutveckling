@@ -8,16 +8,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import domain.Person;
+import java.sql.Statement;
 /**
- * DAO for the persistent handling of a Person object. It manages all
- * CRUD operations and conversion between the object world student and
- * the relational version student (DB version).
- * Due to the use of a DbConnectionManager the DAO doesen't need to 
- * use, or even know, about any of lower level connections to the Database.
- * It 'speaks' in Objects with the object world (Domain model)and in 
- * relational sql strings, tables, columns and result sets with the database.
- * @author awi
  *
+ * @author 22wili03
  */
 public class PersonDao implements Dao<Person> {
 
@@ -61,73 +55,67 @@ public class PersonDao implements Dao<Person> {
 	}
 
 	@Override
-	public boolean save(Person t) {
-            PreparedStatement preparedStatement = null;
-            ResultSet resultSet = null;
-            int rowCount = 0;
-            boolean saveSucess = false;
+	public Person save(Person t) {
             try {
-                //****This is just for checking the 'save' is a sucess. Count rows before save... ***
-                resultSet = dbConManagerSingleton.excecuteQuery("SELECT COUNT(id) FROM labpersons");
-                resultSet.next();
-                rowCount = resultSet.getInt(1);
-                //System.out.println(rowCount); // Debug print
-
-                //*******This is the main 'save' operation ***************************
-                preparedStatement = dbConManagerSingleton.prepareStatement(
-                                                                                  "INSERT INTO labpersons (name, birth_year) " +
-                                                                                  "VALUES (?, ?)");
+                PreparedStatement preparedStatement = dbConManagerSingleton.prepareStatement(
+                        "INSERT INTO labpersons (name, birth_year) VALUES (?, ?)",
+                        Statement.RETURN_GENERATED_KEYS
+                );
                 preparedStatement.setString(1, t.getName());
                 preparedStatement.setInt(2, t.getBirthYear());
-                preparedStatement.executeUpdate();
-                // ********************************************************************
 
-                // **** Check nbr of rows after 'save'. Compare with previous row count *****
-                resultSet = dbConManagerSingleton.excecuteQuery("SELECT COUNT(id) FROM labpersons");
-                resultSet.next();
-                int newRowCount = resultSet.getInt(1);
-                if( newRowCount == (rowCount + 1)) // Check if table is one more row after 'save'
-                        saveSucess = true;
-                System.out.format("Previous row count: %d    Current row count: %d", rowCount, newRowCount);
+                int affectedRows = preparedStatement.executeUpdate();
+
+                if (affectedRows == 0) {
+                    throw new SQLException("Creating room failed, no rows affected.");
+                }
+
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        t = new Person(generatedKeys.getInt(1), t.getName(), t.getBirthYear());
+                    } else {
+                        throw new SQLException("Creating room failed, no ID obtained.");
+                    }
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // Handle the exception appropriately in your context
             }
-            catch ( SQLException e) {
-                    e.printStackTrace();
-            }
-            return saveSucess;
+
+            return t;
 	}
-	/**
-	 * This method uses a temporary Student set with the desired changed values.
-	 * It must have a 'id' that corresponds to a existing record in the database.
-	 * @param t - an instance of a Student with new values on attributes but 
-	 * an 'id' identical to an existing student in the DB
-	 */
+	
+        
 	@Override
-	public void update(Person t) {
+	public Person update(Person t) {
             try {
                 PreparedStatement preparedStatement = dbConManagerSingleton.prepareStatement("UPDATE labpersons SET name=?, birth_year=? WHERE id=?;");
                 preparedStatement.setString(1, t.getName());
                 preparedStatement.setInt(2, t.getBirthYear());
                 preparedStatement.setInt(3, t.getId());
-                boolean affectedRows = preparedStatement.execute();
-                if( !affectedRows) { 
+                int affectedRows = preparedStatement.executeUpdate();
+                if(affectedRows == 0) { 
                     throw new SQLException("No update was performed on labpersons with 'id' " + t.getId());
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            return t;
 	}
 
 	@Override
-	public void delete(Person t) {
+	public Person delete(Person t) {
 
             try {
                 PreparedStatement preparedStatement = dbConManagerSingleton.prepareStatement("DELETE FROM labpersons WHERE id = " + t.getId());
-                boolean affectedRows = preparedStatement.execute();
-                if( !affectedRows) {
+                int affectedRows = preparedStatement.executeUpdate();
+                if(affectedRows == 0) {
                     throw new SQLException("No update was performed on labpersons with 'id' " + t.getId());
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            return t;
 	}
 }

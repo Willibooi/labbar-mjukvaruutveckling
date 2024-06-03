@@ -8,13 +8,14 @@ import domain.Site;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
  *
- * @author GTSA - Infinity
+ * @author 22wili03
  */
 public class SiteDao implements Dao<Site> {
     
@@ -63,43 +64,36 @@ public class SiteDao implements Dao<Site> {
     }
 
     @Override
-    public boolean save(Site t) {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        int rowCount = 0;
-        boolean saveSucess = false;
+    public Site save(Site t) {
         try {
-            //****This is just for checking the 'save' is a sucess. Count rows before save... ***
-            resultSet = dbConManagerSingleton.excecuteQuery("SELECT COUNT(id) FROM labsites");
-            resultSet.next();
-            rowCount = resultSet.getInt(1);
-            //System.out.println(rowCount); // Debug print
-
-            //*******This is the main 'save' operation ***************************
-            preparedStatement = dbConManagerSingleton.prepareStatement(
-                                                                              "INSERT INTO labsites (name, area) " +
-                                                                              "VALUES (?, ?)");
+            PreparedStatement preparedStatement = dbConManagerSingleton.prepareStatement(
+                    "INSERT INTO labsites (name, area) VALUES (?, ?)", 
+                    Statement.RETURN_GENERATED_KEYS
+            );
             preparedStatement.setString(1, t.getName());
             preparedStatement.setInt(2, t.getArea());
-            preparedStatement.executeUpdate();
-            // ********************************************************************
+            int affectedRows = preparedStatement.executeUpdate();
 
-            // **** Check nbr of rows after 'save'. Compare with previous row count *****
-            resultSet = dbConManagerSingleton.excecuteQuery("SELECT COUNT(id) FROM labsites");
-            resultSet.next();
-            int newRowCount = resultSet.getInt(1);
-            if( newRowCount == (rowCount + 1)) // Check if table is one more row after 'save'
-                    saveSucess = true;
-            System.out.format("Previous row count: %d    Current row count: %d", rowCount, newRowCount);
+            if (affectedRows == 0) {
+                throw new SQLException("Creating site failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    t = new Site(generatedKeys.getInt(1), t.getName(), t.getArea());
+                } else {
+                    throw new SQLException("Creating site failed, no ID obtained.");
+                }
+            }
         }
         catch ( SQLException e) {
             e.printStackTrace();
         }
-        return saveSucess;
+        return t;
     }
 
     @Override
-    public void update(Site t) {
+    public Site update(Site t) {
         PreparedStatement preparedStatement = null;
 
         try {
@@ -110,33 +104,33 @@ public class SiteDao implements Dao<Site> {
             preparedStatement.setInt(2, t.getArea());
             preparedStatement.setInt(3, t.getId());
 
-            boolean affectedRows = preparedStatement.execute();
-            if( !affectedRows) {
-                    throw new SQLException("No update was performed on labsites with 'id' " + t.getId());
+            int affectedRows = preparedStatement.executeUpdate();
+            if(affectedRows == 0) {
+                throw new SQLException("No update was performed on labsites with 'id' " + t.getId());
             }
 
             // ********************************************************************
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        return t;
     }
 
     @Override
-    public void delete(Site t) {
+    public Site delete(Site t) {
         PreparedStatement preparedStatement = null;
         try {
             // *******This is the main 'save' operation ***************************
             preparedStatement = dbConManagerSingleton
                             .prepareStatement("DELETE FROM labsites WHERE id = " + t.getId());
-            boolean affectedRows = preparedStatement.execute();
-            if( !affectedRows) {
+            int affectedRows = preparedStatement.executeUpdate();
+            if(affectedRows == 0) {
                     throw new SQLException("No update was performed on labsites with 'id' " + t.getId());
             }
             // ********************************************************************
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return t;
     }
-    
 }

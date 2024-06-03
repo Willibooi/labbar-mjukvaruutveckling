@@ -3,11 +3,8 @@ package repository;
 import java.util.List;
 
 /**
- * Interface for all CRUD operations of DAO classes
- * @author awi
  *
- * @param <T> One of the intended model classes that a DAO
- * implementation should be able to handle
+ * @author 22wili03
  */
 public interface Dao<T> {
 
@@ -15,9 +12,9 @@ public interface Dao<T> {
 
     List<T> getAll();
 
-    boolean save(T t);
+    T save(T t);
 
-    void update(T t);
+    T update(T t);
 
-    void delete(T t);
+    T delete(T t);
 }

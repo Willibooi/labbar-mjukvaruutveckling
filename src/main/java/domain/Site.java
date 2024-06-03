@@ -6,7 +6,7 @@ package domain;
 
 /**
  *
- * @author GTSA - Infinity
+ * @author 22wili03
  */
 public class Site {
     
@@ -20,9 +20,9 @@ public class Site {
     }
     
     public Site(int id, String name, int squareMeter) {
+        this(name, squareMeter);
         this.id = id;
-        this.name = name;
-        this.squareMeter = squareMeter;
+        
     }
     
     public int getId() {
@@ -36,10 +36,9 @@ public class Site {
     public void setName(String name) {
         if(name.equals(""))
             throw new IllegalArgumentException();
-        if(name.length() <= 50) 
-            this.name = name;
-        else 
+        if(name.length() > 50) 
             this.name = name.substring(50);
+        this.name = name;
     }
     
     public int getArea() {
@@ -47,10 +46,9 @@ public class Site {
     }
     
     public void setArea(int squareMeter) {
-        if(squareMeter > 0)
-            this.squareMeter = squareMeter;
-        else 
-            throw new IllegalArgumentException();
+        if(squareMeter <= 0)
+            throw new IllegalArgumentException("Area cannot be equal or less than 0");
+        this.squareMeter = squareMeter;
         
     }
     

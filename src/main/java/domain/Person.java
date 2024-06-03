@@ -8,7 +8,7 @@ import java.time.Year;
 
 /**
  *
- * @author GTSA - Infinity
+ * @author 22wili03
  */
 public class Person {
     
@@ -17,14 +17,13 @@ public class Person {
     int birth_year;
     
     public Person(String name, int birth_year) {
-        this.name = name;
-        this.birth_year = birth_year;
+        setName(name);
+        setBirthYear(birth_year);
     }
     
     public Person(int id, String name, int birth_year) {
+        this(name, birth_year);
         this.id = id;
-        this.name = name;
-        this.birth_year = birth_year;
     }
     
     public int getId() {
@@ -37,11 +36,11 @@ public class Person {
     
     public void setName(String name) {
         if(name.equals(""))
-            throw new IllegalArgumentException();
-        if(name.length() <= 50) 
+            throw new IllegalArgumentException("Name cannot be empty");
+        if(name.length() > 50) 
+            this.name = name.substring(0, 50);
+        else
             this.name = name;
-        else 
-            this.name = name.substring(50);
     }
     
     public int getBirthYear() {
@@ -49,16 +48,14 @@ public class Person {
     }
     
     public void setBirthYear(int birth_year) {
-        if(birth_year >= 1900 && birth_year < Year.now().getValue())
-            this.birth_year = birth_year;
-        else 
+        if(birth_year < 1900 || birth_year > Year.now().getValue())
             throw new IllegalArgumentException();
-        
+        this.birth_year = birth_year;
     }
     
     @Override
     public String toString() {
-        return name;
+        return name + ", " + birth_year;
     }
     
 }
